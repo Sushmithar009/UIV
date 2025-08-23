@@ -6,7 +6,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/Sushmithar009/UIV.git',
-                    credentialsId: 'github-pat'   // Replace with your GitHub credentials ID
+                    credentialsId: 'Sushmithar009'   // Replace with your GitHub credentials ID
             }
         }
 
