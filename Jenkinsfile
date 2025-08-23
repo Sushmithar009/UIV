@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean install -DskipTests'
+                bat '"C:\\Windows\\System32\\cmd.exe" /c mvn clean install -DskipTests'
             }
         }
 
