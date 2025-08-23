@@ -1,18 +1,19 @@
 pipeline {
-    agent any   // runs on any Jenkins agent
+    agent any
 
-    environment {
-        // Make sure Maven and Java are in PATH, or configured in Jenkins
-        MAVEN_HOME = "C:\\apache-maven-3.9.6"   // update if different
-        PATH = "${MAVEN_HOME}\\bin;${PATH}"
+    tools {
+        // These names must match the ones you configure in:
+        // Jenkins → Manage Jenkins → Tools
+        maven 'Maven-3.9'   // e.g. Maven installation name
+        jdk 'JDK-17'        // e.g. JDK installation name
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', 
+                git branch: 'main',
                     url: 'https://github.com/Sushmithar009/UIV.git',
-                    credentialsId: 'github-pat'   // replace with your Jenkins credential ID
+                    credentialsId: 'github-pat'   // Replace with your GitHub credentials ID
             }
         }
 
@@ -36,7 +37,7 @@ pipeline {
 
         stage('Run Spring Boot App') {
             steps {
-                bat 'java -jar target\\*.jar'
+                bat 'java -jar target/*.jar'
             }
         }
 
@@ -49,10 +50,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build and packaging successful!"
+            echo '✅ Build and packaging completed successfully!'
         }
         failure {
-            echo "❌ Build failed. Check logs."
+            echo '❌ Build failed. Please check logs.'
         }
     }
 }
