@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Set your Maven installation path
-        MAVEN_HOME = "C:\Program Files\apache-maven-3.8.8-bin\apache-maven-3.8.8"
+        MAVEN_HOME = "MAVEN_HOME = "C:\\Program Files\\apache-maven-3.8.8-bin\\apache-maven-3.8.8"
     }
 
     stages {
