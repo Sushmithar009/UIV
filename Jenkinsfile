@@ -16,37 +16,25 @@ pipeline {
         }
 
         stage('Build') {
-            steps {
-                powershell '''
-                    & "${env:MAVEN_HOME}\\bin\\mvn.cmd" clean install -DskipTests
-                '''
-            }
-        }
-
-        stage('Test') {
-            steps {
-                powershell '''
-                    & "${env:MAVEN_HOME}\\bin\\mvn.cmd" test
-                '''
-            }
-        }
-
-        stage('Package') {
-            steps {
-                powershell '''
-                    & "${env:MAVEN_HOME}\\bin\\mvn.cmd" package -DskipTests
-                '''
-            }
-        }
-
-        stage('Run Spring Boot App') {
-            steps {
-                powershell '''
-                    java -jar target/*.jar
-                '''
-            }
-        }
-
+    steps {
+        bat "\"${env.MAVEN_HOME}\\bin\\mvn.cmd\" clean install -DskipTests"
+    }
+}
+stage('Test') {
+    steps {
+        bat "\"${env.MAVEN_HOME}\\bin\\mvn.cmd\" test"
+    }
+}
+stage('Package') {
+    steps {
+        bat "\"${env.MAVEN_HOME}\\bin\\mvn.cmd\" package -DskipTests"
+    }
+}
+stage('Run Spring Boot App') {
+    steps {
+        bat "java -jar target/*.jar"
+    }
+}
         stage('Archive Artifacts') {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
