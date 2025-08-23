@@ -1,13 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        // These names must match the ones you configure in:
-        // Jenkins → Manage Jenkins → Tools
-        maven 'Maven-3.9'   // e.g. Maven installation name
-        jdk 'JDK-17'        // e.g. JDK installation name
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -37,6 +30,7 @@ pipeline {
 
         stage('Run Spring Boot App') {
             steps {
+                // Run the generated Spring Boot JAR
                 bat 'java -jar target/*.jar'
             }
         }
