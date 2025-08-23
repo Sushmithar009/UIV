@@ -1,79 +1,58 @@
 pipeline {
-    agent any
-
-    tools {
-        maven 'Maven-3.9.6'   // configure this under Manage Jenkins → Tools
-        jdk 'JDK-17'          // or whatever JDK you configured in Jenkins
-    }
+    agent any   // runs on any Jenkins agent
 
     environment {
-        SPRING_PROFILES_ACTIVE = "dev"   // change to prod/qa if needed
-        DB_URL = "jdbc:mysql://localhost:3306/mydb"
-        DB_USER = "root"
-        DB_PASSWORD = "password"
+        // Make sure Maven and Java are in PATH, or configured in Jenkins
+        MAVEN_HOME = "C:\\apache-maven-3.9.6"   // update if different
+        PATH = "${MAVEN_HOME}\\bin;${PATH}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
+                git branch: 'main', 
                     url: 'https://github.com/Sushmithar009/UIV.git',
-                    credentialsId: 'github-pat'  // replace with your Jenkins GitHub credential ID
+                    credentialsId: 'github-pat'   // replace with your Jenkins credential ID
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean install -DskipTests'
+                bat 'mvn clean install -DskipTests'
             }
         }
 
-        stage('Run Unit Tests') {
+        stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
 
-        stage('Database Migration') {
-            when {
-                expression { return fileExists('src/main/resources/db/migration') } // Only if migrations exist
-            }
+        stage('Run Spring Boot App') {
             steps {
-                echo "Running DB migrations..."
-                // Example: Flyway migration (replace if you use Liquibase)
-                sh 'mvn flyway:migrate -Dflyway.url=$DB_URL -Dflyway.user=$DB_USER -Dflyway.password=$DB_PASSWORD'
+                bat 'java -jar target\\*.jar'
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            }
-        }
-
-        stage('Run Application (Optional)') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo "Starting Spring Boot app..."
-                sh 'nohup java -jar target/*.jar --spring.profiles.active=$SPRING_PROFILES_ACTIVE &'
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build and package successful!"
+            echo "✅ Build and packaging successful!"
         }
         failure {
-            echo "❌ Build failed!"
+            echo "❌ Build failed. Check logs."
         }
     }
 }
