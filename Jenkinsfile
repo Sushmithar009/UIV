@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Update this if Maven is installed elsewhere
-        MAVEN_HOME = "C:\\apache-maven-3.9.9"
-        PATH = "${MAVEN_HOME}\\bin;${PATH}"
+        // Set your Maven installation path
+        MAVEN_HOME = "C:\Program Files\apache-maven-3.8.8-bin\apache-maven-3.8.8"
     }
 
     stages {
@@ -12,14 +11,14 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/Sushmithar009/UIV.git',
-                    credentialsId: 'Sushmithar009' // replace with your Jenkins GitHub PAT credentialsId
+                    credentialsId: 'Sushmithar009' // replace with your GitHub credentials ID in Jenkins
             }
         }
 
         stage('Build') {
             steps {
                 powershell '''
-                    mvn clean install -DskipTests
+                    & "${env:MAVEN_HOME}\\bin\\mvn.cmd" clean install -DskipTests
                 '''
             }
         }
@@ -27,7 +26,7 @@ pipeline {
         stage('Test') {
             steps {
                 powershell '''
-                    mvn test
+                    & "${env:MAVEN_HOME}\\bin\\mvn.cmd" test
                 '''
             }
         }
@@ -35,7 +34,7 @@ pipeline {
         stage('Package') {
             steps {
                 powershell '''
-                    mvn package -DskipTests
+                    & "${env:MAVEN_HOME}\\bin\\mvn.cmd" package -DskipTests
                 '''
             }
         }
