@@ -2,39 +2,40 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven-3.8.8'   // name you configure in Jenkins -> Global Tool Configuration
-        jdk 'JDK-17'        // same for Java
+        maven 'maven-3.8.8'   // configure in Global Tool Configuration
+        jdk 'JDK-17'        // configure in Global Tool Configuration
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', 
-                    url: 'https://github.com/Sushmithar009/UIV.git'
+                git branch: 'main',
+                    url: 'https://github.com/Sushmithar009/UIV.git',
+                    credentialsId: 'github-pat'
             }
         }
 
         stage('Build') {
             steps {
-                sh "mvn clean install -DskipTests"
+                bat "mvn clean install -DskipTests"
             }
         }
 
         stage('Test') {
             steps {
-                sh "mvn test"
+                bat "mvn test"
             }
         }
 
         stage('Package') {
             steps {
-                sh "mvn package -DskipTests"
+                bat "mvn package -DskipTests"
             }
         }
 
         stage('Run Spring Boot App') {
             steps {
-                sh "java -jar target/*.jar"
+                bat "java -jar target/*.jar"
             }
         }
 
