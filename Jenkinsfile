@@ -32,17 +32,6 @@ pipeline {
                 bat '"C:\\Windows\\System32\\cmd.exe" /c "mvn package"'
             }
         }
-stage('Run Spring Boot App') {
-    steps {
-        script {
-            def jarFile = bat(
-                script: 'dir /B target\\*.jar',
-                returnStdout: true
-            ).trim()
-            bat "java -jar target\\${jarFile}"
-        }
-    }
-}
 
         stage('Archive Artifacts') {
             steps {
