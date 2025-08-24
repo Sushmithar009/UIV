@@ -11,31 +11,31 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/Sushmithar009/UIV.git',
-                    credentialsId: 'github-pat'
+                    credentialsId: 'Sushmithar009'
             }
         }
 
         stage('Build') {
             steps {
-                bat "mvn clean install -DskipTests"
+                bat '"C:\\Windows\\System32\\cmd.exe" /c "mvn clean install -DskipTests"'
             }
         }
 
         stage('Test') {
             steps {
-                bat "mvn test"
+                bat '"C:\\Windows\\System32\\cmd.exe" /c "mvn test"'
             }
         }
 
         stage('Package') {
             steps {
-                bat "mvn package -DskipTests"
+                bat '"C:\\Windows\\System32\\cmd.exe" /c "mvn package"'
             }
         }
 
         stage('Run Spring Boot App') {
             steps {
-                bat "java -jar target/*.jar"
+                bat '"C:\\Windows\\System32\\cmd.exe" /c "java -jar target\\*.jar"'
             }
         }
 
